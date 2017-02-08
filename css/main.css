@@ -1,0 +1,126 @@
+/*
+ * Template Name: CCUI
+ * Version: 1.0.0
+ * Author: Leon Cui
+ * Email: cuiyu@hundsun.com
+ *
+ * 1.0 @main
+ *        
+ */
+
+/* 1.0 @main */
+
+.g-page {
+  width: 1200px;
+  margin: 0 auto;
+}
+@media (min-width: 980px) and (max-width: 1199px) {
+    .g-page {
+    width: 980px;
+  }
+}
+@media (max-width: 979px) {
+  .g-page {
+  width: auto;
+  }
+}
+.g-page:before,
+.g-page:after {
+  display: table;
+  content: "";
+}
+.g-page:after {
+  clear: both;
+}
+header {
+  text-align: center;
+  padding: 1rem 0;
+  background: #348FE2;
+}
+header > div > h1 {
+  float: left;
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+  color: #fff;
+  padding-left: 10px; 
+}
+@media (max-width: 979px) {
+  header > div > h1 {
+    float: none;
+    margin-bottom: 20px;
+  }
+}
+nav {
+  float: right;
+}
+@media (max-width: 979px) {
+  nav {
+    float: none;
+  }
+}
+nav > a {
+  margin: 0 0.75rem;
+  color: #fff;
+}
+nav > a:hover,
+nav > a:active {
+  color: #efefef;
+}
+section {
+  padding: 1rem 0;
+}
+.m-left-nav {
+  list-style: none;
+  padding-left: 0;
+  margin-right: 2rem;
+}
+@media (max-width: 1199px) {
+  .m-left-nav {
+    margin-right: 0;
+  }
+}
+.m-left-nav .nav-title {
+  color: #000;
+  font-size: 1rem;
+  margin: 10px 0 5px;
+}
+.m-left-nav > li {
+  display: block;
+}
+.m-left-nav > li > a {
+  border-radius: 3px;
+  color: #999;
+  display: block;
+  font-size: 0.875rem;
+  line-height: 20px;
+  padding: 3px 10px;
+}
+.m-left-nav > li > a:hover {
+  background: #f7f7f7;
+  color: #333;
+}
+.m-left-nav > li > a.active {
+  background: #348FE2;
+  color: #fff;
+}
+.m-right-cnt {
+  padding-left: 2rem;
+  border-left: 1px solid #ccc;
+}
+@media (min-width: 980px) and (max-width: 1199px) {
+  .m-right-cnt {
+    padding-left: 30px;
+  }
+}
+@media (max-width: 979px) {
+  .m-right-cnt {
+    padding-left: 10px;
+  }
+}
+.m-right-cnt > h4 {
+  font-size: 1.5rem;
+}
+.m-right-cnt > h5 {
+  font-size: 1rem;
+}

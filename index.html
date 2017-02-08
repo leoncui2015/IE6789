@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CCUI" />
+  <meta name="keywords" content="CCUI" />
+  <meta name="author" content="Leon Cui" />
+
+  <link rel="stylesheet" type="text/css" href="css/base.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+
+  <!-- For code highlight -->
+  <script src="js/highlight/highlight.pack.js"></script>
+  <link href="js/highlight/styles/github.css" rel="stylesheet" />
+
+  <title>IE兼容技巧与调试</title>
+</head>
+<body>
+  <header>
+    <div class="g-page">
+      <h1>IE兼容技巧与调试</h1>
+      <nav><a href="">IE模式</a> <a href="">IE与HTML</a> <a href="">IE与CSS</a> <a href="">IE与设计师</a> <a href="">IE各版本bug</a> <a href="">IE的hack技巧</a> <a href="">IE的调试技巧</a> <a href="">IE其他</a></nav>
+    </div>
+  </header>
+ 
+  <section>
+    <div class="g-page">
+      <div class="g-grid-2">
+        <ul class="m-left-nav">
+          <li><a href="" class="nav-title">目录</a></li>
+          <li><a href="#1">IE模式</a></li>
+          <li><a href="#2">IE与HTML</a></li>
+          <li><a href="#3">IE与CSS</a></li>
+          <li><a href="#4">IE与设计师</a></li>
+          <li><a href="#5">IE各版本bug</a></li>
+          <li><a href="#6">IE的hack技巧</a></li>
+          <li><a href="#7">IE的调试技巧</a></li>
+          <li><a href="#8">IE其他</a></li>
+        </ul>
+      </div>
+      <div class="g-grid-10 m-right-cnt">
+
+        <h4 id=1>IE模式</h4>
+        <p>说到IE模式，可以先从各种浏览器的内核Rendering Engine(排版引擎/渲染引擎)说起。</p>
+        <p>主流的内核主要有 Gecko（Firefox浏览器）、WebKit（Safari、Chrome等浏览器）、Opera（Opera浏览器）、Trident（IE浏览器）。</p>
+        <p>IE所对应内核分别是：IE6、IE7、IE8（Trident 4.0）、IE9（Trident 5.0）、IE10（Trident 6.0）。</p>
+        <p>Trident内核的常见浏览器有：</p>
+        <p>世界之窗、 360安全浏览器、傲游；搜狗浏览器；腾讯TT；阿云浏览器（早期版本）、百度浏览器（早期版本）等。<br />
+        其中部分浏览器的新版本是“双核”甚至是“多核”，其中一个内核是Trident，然后再增加一个其他内核。<br />国内的厂商一般把其他内核叫做“高速浏览模式”，而Trident则是“兼容浏览模式”，用户可以来回切换。</p>
+        <hr />
+        <h5>兼容性视图</h5>
+        <p>IE8在IE6、IE7的基础上增加了兼容性视图，它可以让网页以IE6/7的代码规范来显示，解决大部分由于代码标准不一致引起的网页问题。</p>
+        <p>“兼容性视图”涉及两个重要的功能便是“浏览器模式”和“文档模式”。</p>
+        <p><img src="images/img2.png"></p>
+        <p>“浏览器模式”用于改变IE对该网页的默认文档模式、用的不同版本IE进行解析。<br />用户可以通过单击地址栏旁边的兼容性视图按钮来手动切换到兼容性模式(部分低版本IE浏览器)。</p>
+        <p><img src="images/img1.jpg"></p>
+        <p>“文档模式”用于指定IE的页面排版引擎（Trident）以哪个版本的方式来解析并渲染网页代码。</p>
+        <hr />
+        <h5>IE6、IE7、IE8与Quirks mode、"Standards mode"(也称为"strict mode")</h5>
+        <p>IE6、IE7中"Quirks mode"（怪异模式）会使页面以旧版本（IE6以下）浏览器的模式来显示。<br />
+        "Standards mode"(标准模式)特点是支持业界标准最为完善。然而要利用这个增强的支持功能，网页必须包含恰当的<code>&lt;!DOCTYPE&gt;</code>指令。 </p>
+        <p>若一个网页没有包含<code>&lt;!DOCTYPE&gt;</code>指令，IE6会将它以quirks mode显示，此模式下盒子模型盒box-sizing: border-box一致（IE6以下版本的IE浏览器将 border 与 padding 都包含在 width 之内，效果等同于现在的box-sizing: border-box），It's funny。</p>
+        <p>举个栗子：<a href="ie6-8-quirk.html" target="_blank">ie6-8-quirk.html</a></p>
+        <p><img src="images/img3.gif"></p>
+        <p>若网页包含有效的<code>&lt;!DOCTYPE&gt;</code>指令但浏览器无法辨识，IE6会将它以IE6 standards mode显示。此模式下,IE6-IE8不支持box-sizing（CSS3才有的属性）。这意味着你的网页如果要使用box-sizing: border-box，必须使用quirk mode。</p>
+        <hr />
+        <h5>常用的 DOCTYPE 声明</h5>
+        <p>HTML 5</p>
+        <pre><code class="html5"><span class="doctype">&lt;!DOCTYPE html&gt;</span></code></pre>
+        <p>HTML 4.01 Strict</p>
+        <p>该 DTD 包含所有 HTML 元素和属性，但不包括展示性的和弃用的元素（比如 font）。不允许框架集（Framesets）。</p>
+        <pre><code class="html5"><span class="doctype">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;</span></code></pre>
+
+        <p>HTML 4.01 Transitional（较为常用）</p>
+        <p>该 DTD 包含所有 HTML 元素和属性，包括展示性的和弃用的元素（比如 font）。不允许框架集（Framesets）。</p>
+        <pre><code class="html5"><span class="doctype">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; 
+&quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;</span></code></pre>
+
+        <p>HTML 4.01 Frameset</p>
+        <p>该 DTD 等同于 HTML 4.01 Transitional，但允许框架集内容。</p>
+        <pre><code class="html5"><span class="doctype">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Frameset//EN&quot; 
+&quot;http://www.w3.org/TR/html4/frameset.dtd&quot;&gt;</span></code></pre>
+
+        <p>XHTML 1.0 Transitional（基本等同HTML 4.01 Transitional）</p>
+        <p>该 DTD 包含所有 HTML 元素和属性，包括展示性的和弃用的元素（比如 font）。不允许框架集（Framesets）。必须以格式正确的 XML 来编写标记。</p>
+        <pre><code class="html5"><span class="doctype">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;
+http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</span></code></pre>
+        <hr />
+
+        <h5>指定文件兼容性模式</h5>
+        <p>要为你的网页指定文件模式，需要在你的网页中使用meta元素放入<code>X-UA-Compatible http-equiv</code>标头。<br />如下示例：IE使用IE7的标准模式（standards mode）编译内容。</p>
+        <pre><code class="html5"><span class="doctype">&lt;html&gt; 
+&lt;head&gt; 
+&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=7&quot; /&gt; 
+&lt;title&gt;title&lt;/title&gt; 
+&lt;/head&gt; 
+&lt;body&gt; 
+&lt;p&gt;Content&lt;/p&gt; 
+&lt;/body&gt; 
+&lt;/html&gt; </span></code></pre>
+        <p>为什么网站重构前期有一段时间较多使用<code>X-UA-Compatible content=&quot;IE=7&quot;</code>？<br />因为那个年代IE最高版本是IE8，IE7相比IE6对CSS支持更加全面，比如IE7支持＊全局选择器，IE8支持更加全面，但是bug也多，所以为了兼容性和重构成本，大家更多的选择了IE7的标准模式来解析网页。<br />现在IE已经更新到IE11，IE11已经几乎解决了老版本存在的所有bug，对HTML5和CSS3也支持充分。所以，现在让装了IE11的用户体验IE7的各种不支持和不兼容，是不合适的。</p>
+        <p>举个栗子：<a href="ie11-quirk-ie8.html" target="_blank">ie11-quirk-ie8.html</a></p>
+        <hr />
+        <h5>几种IE8的文件兼容性模式</h5>
+        <p>• Emulate IE8 mode 指示IE使用&lt;!DOCTYPE&gt;指令来编译内容。</p>
+        <p>  Standards mode 指令会显示成IE8 Standards mode而quirks mode会显示成IE5 mode。不同于IE8 mode，Emulate IE8 mode重视&lt;!DOCTYPE&gt;指令。</p>
+<p>• Emulate IE7 mode 指示IE使用&lt;!DOCTYPE&gt;指令来决定如何编译内容。</p>
+<p>  Standards mode指令会显示成IE7 Standards mode而quirks mode会显示成IE5 mode。不同于IE7 mode，Emulate IE7 mode重视&lt;!DOCTYPE&gt;指令。</p>
+<p>• IE5 mode 指示IE使用IE7的quirks mode编译内容，和IE5中显示的非常类似。</p>
+<p>• IE7 mode 指示IE使用IE7的standards mode编译内容，无论网页是否含有&lt;!DOCTYPE&gt;指令。 </p>
+<p>• IE8 mode 提供对业界标准的最高支持，包含 W3C Cascading Style Sheets Level 2.1 Specification和W3C Selectors API，并有限的支持 W3C Cascading Style Sheets Level 3 Specification (Working Draft)。 </p>
+<p>• Edge mode 指示IE以目前可用的最高模式显示内容。当使用IE8时其等同于IE8 mode。若(假定)未来放出支持更高兼容性模式的IE，使用Edge mode的页面会使用该版本能支持的最高模式来显示内容。同样的那些页面在使用IE8浏览时仍会照常显示。 </p>
+<p>由于edge mode使用该IE版本所能支持的最高模式来显示所浏览的网页内容，建议仅使用于测试页及其他非商用页面。 </p>
+        
+        <h4 id=2>IE与HTML</h4>
+        <p>尽管从官方数据看起来，IE9已经全面支持HTML5和CSS3，但实际还是支持不到一半，所以我们还是从IE9开始向后兼容。（IE10已经支持很好，不在兼容范围内。）</p>
+        <p>我们使用<code>html5.js</code>来使IE6-9识别HTML5标签。</p>
+        <pre><code class="html5"><span class="doctype">&lt;!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --&gt;
+&lt;!--[if lt IE 9]&gt;
+&lt;script src=&quot;js/html5.js&quot;&gt;&lt;/script&gt;
+&lt;![endif]--&gt;
+</span></code></pre>
+        <p>举个栗子：<a href="ie8-html5.html" target="_blank">ie8-html5.html</a></p>
+        <p><code>img</code>标签使用<code>EvPng.js</code>来使IE6支持PNG透明属性。</p>
+        <pre><code class="html5"><span class="doctype">&lt;div class=&quot;ie-png&quot;&gt;&lt;img src=&quot;images/logo2.png&quot; alt=&quot;&quot; /&gt;&lt;/div&gt;
+</span></code></pre>
+        <pre><code class="html5"><span class="doctype">&lt;!--[if lte IE 6]&gt;
+&lt;script src=&quot;js/EvPng.js&quot;&gt;&lt;/script&gt;
+&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+  EvPNG.fix(&quot;.ie-png img&quot;);
+  &lt;/script&gt;       
+&lt;![endif]--&gt;
+</span></code></pre>
+        <p>举个栗子：<a href="ie6-png.html" target="_blank">ie6-png.html</a></p>
+        <hr />
+
+        <h4 id=3>IE与CSS</h4>
+        <p>IE6、IE7和IE8都不支持CSS3，这里我们提供一些常用的CSS3兼容方法。</p>
+        <h5>@media（媒体查询）</h5>
+        <p>我们使用媒体查询来实现桌面端与手机端的自适应设计，加载<code>respond.src.js</code>让IE6-9支持CSS3的媒体查询。</p>
+        <pre><code class="html5"><span class="doctype">&lt;!-- For IE6-9 support of media query --&gt;
+&lt;!--[if lt IE 9]&gt;
+&lt;script src=&quot;js/respond.src.js&quot;&gt;&lt;/script&gt;
+&lt;![endif]--&gt;
+</span></code></pre>
+        <p>举个栗子：<a href="ie8-media.html" target="_blank">ie8-media.html</a></p>
+        <h5>font-awesome（图标字体）</h5>
+        <p>图标字体被用来替代传统网页上的小图片图标，我们使用<code>font-awesome-ie.min.css</code>来让IE6-7也支持这个功能。</p>
+        <pre><code class="html5"><span class="doctype">&lt;!-- For IE6-7 support of font-awesome --&gt;
+&lt;!--[if lt IE 8]&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;css/font-awesome-ie.min.css&quot; type=&quot;text/css&quot; /&gt;
+&lt;![endif]--&gt;
+</span></code></pre>
+        <p>举个栗子：<a href="ie6-font.html" target="_blank">ie6-font.html</a></p>
+        <h5>border-radius（圆角属性）</h5>
+        <p>我们使用<code>roundies.js</code>来使IE6-8支持圆角属性。</p>
+        <pre><code class="html5"><span class="doctype">&lt;div class=&quot;ie-round&quot; style=&quot;padding:10px;border-radius:6px;border:1px solid #ccc;&quot;&gt;IE圆角边框&lt;/div&gt;
+</span></code></pre>
+        <pre><code class="html5"><span class="doctype">&lt;script src=&quot;js/roundies.js&quot;&gt;&lt;/script&gt;
+&lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+  DD_roundies.addRule('.ie-round', '6px');
+&lt;/script&gt;
+</span></code></pre>
+        <p>举个栗子：<a href="ie8-round.html" target="_blank">ie8-round.html</a></p>
+        <p>提醒：使用JS插件会消耗一些性能，建议在单页和小范围内使用。</p>
+
+        <h4 id=4>IE与设计师</h4>
+        <p>在页面大量使用PNG图片和圆角属性（兼容耗费大量浏览器性能），又需要适配IE6－8的情况下，需要把图片导出为带背景色的JPG，或者有锯齿的GIF格式，边框线也按照尖角设计。<br />渐变和边框背景无法通过CSS3来实现，需要切割图片作为背景供CSS平铺背景用。<br /> 网页小元素图标使用图标字体库里有的（<a href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>），找出该图标字体的类名，然后提供给前端。<br />自定义的小图标需要切割，运维布局替换极不方便。</p>
+
+        <h4 id=5>IE各版本bug</h4>
+        <h5>IE6-margin双倍边距bug</h5>
+        <p>描述：浮动的div在IE6下margin值会加倍。这是一个IE6都存在的bug。<br />解决方法：在这个div里面加上display:inline; </p>
+        <p>举个栗子：<a href="ie6-margin.html" target="_blank">ie6-margin.html</a></p>
+        <h5>IE6-图片下有空隙bug</h5>
+        <p>描述：图片下有空隙。<br />解决方法：改变html的布局，或者设置img 为display:block 或者设置vertical-align 属性为 vertical-align:top | bottom | middle 都可以解决。</p>
+        <p>举个栗子：<a href="ie6-img.html" target="_blank">ie6-img.html</a></p>
+        <h5>IE6-无法定义1px左右高度的容器bug</h5>
+        <p>描述：IE6下这个问题是因为默认的行高造成的。<br />解决方法：方法也有很多,例如:overflow:hidden | zoom:0.08 | line-height:1px­。</p>
+        <p>举个栗子：<a href="ie6-1px.html" target="_blank">ie6-1px.html</a></p>
+
+        <h4 id=6>IE的hack技巧</h4>
+        <p>IE的hack技巧大致分为4种：条件注释法、类内属性前缀法(IE兼容用最多的方法)、选择器前缀法、IE选择器前缀法。</p>
+        <h5>HTML hack - 条件注释法</h5>
+        <p>条件注释一般用来引用专门为IE准备的JS插件（如在其他浏览器下则不加载，减轻加载负担），如我们上述所讲的PNG透明只在IE6下加载。</p>
+        <pre><code class="html5"><span class="doctype">&lt;!--[if !IE]&gt; 除IE外都可识别 &lt;![endif]--&gt;
+&lt;!--[if IE]&gt; 所有的IE可识别 &lt;![endif]--&gt;
+&lt;!--[if IE 6]&gt; 仅IE6可识别 &lt;![endif]--&gt;
+&lt;!--[if lt IE 6]&gt; IE6以及IE6以下版本可识别 &lt;![endif]--&gt;
+&lt;!--[if gte IE 6]&gt; IE6以及IE6以上版本可识别 &lt;![endif]--&gt;
+&lt;!--[if IE 7]&gt; 仅IE7可识别 &lt;![endif]--&gt;
+&lt;!--[if lt IE 7]&gt; IE7以及IE7以下版本可识别 &lt;![endif]--&gt;
+&lt;!--[if gte IE 7]&gt; IE7以及IE7以上版本可识别 &lt;![endif]--&gt;
+&lt;!--[if IE 8]&gt; 仅IE8可识别 &lt;![endif]--&gt;
+&lt;!--[if IE 9]&gt; 仅IE9可识别 &lt;![endif]--&gt; 
+</span></code></pre>
+        <p>lte：就是Less than or equal to的简写，也就是小于或等于的意思。 <br />
+lt ：就是Less than的简写，也就是小于的意思。 <br />
+gte：就是Greater than or equal to的简写，也就是大于或等于的意思。 <br />
+gt ：就是Greater than的简写，也就是大于的意思。 </p>
+        <p>举个栗子：<a href="ie6-png-hack.html" target="_blank">ie6-png-hack.html</a></p>
+
+        <h5>CSS hack - 类内属性前缀法（主要）</h5>
+        <p>通常是在属性上加前缀，比如（-webkit -moz -ms -o IE下有＊ ＋ _ ）。<br />比如 border-radius 圆角，主流浏览器都有他们的专有hack。</p>
+        <pre><code class="CSS"><span class="doctype">-webkit-border-radius: 24px; /* Chrome and Safari */
+-moz-border-radius: 24px; /* Firefox */
+-ms-border-radius: 24px; /* IE */
+-o-border-radius: 24px; /* Opera */
+border-radius: 24px;</span></code></pre>
+        <p>也有不同的是IE8及以上版本是在CSS属性末尾（分号前）添加相应IE版本的代码（ \9 \9\0）。<br />
+        下面的例子，先写全部浏览器能识别的CSS属性，然后hack的CSS属性写在最后一行，这样在特定浏览器下就只显示hack的CSS属性，其他浏览器显示最初的CSS属性。IE的写法顺序也一样，依次从IE-11（最高版本）> IE-10 > IE-9 > IE-8 > IE-7 最后到IE-6。（这样就可以显示每个IE版本下特定的属性，又不会出现属性互相污染）</p>
+        <pre><code class="CSS"><span class="doctype">color: #ccc;
+color: #ccc\9; /* IE6-IE10 */
+color: #ccc\9\0; /* IE9-IE10 */
+color: #ccc\0; /* IE8-IE10 */
+*color: #ccc; /* IE6-IE7 */
++color: #ccc; /* IE7 */
+_color: #ccc; /* IE6 */</span></code></pre>
+        <p>举个栗子：<a href="ie6-11-hack.html" target="_blank">ie6-11-hack.html</a></p>
+        <h5>CSS hack - 选择器前缀法</h5>
+        <p>选择器前缀法是采用媒体查询的方法（需要CSS3支持），一般前面几种已经能解决90%的兼容问题，如果可以用上面的方法解决，不推荐首先用这种。</p>
+        <pre><code class="CSS"><span class="doctype">@media screen and (-webkit-min-device-pixel-ratio:0) { 
+.class-name{
+  color: #ccc; /* Chrome and Safari */
+}
+}
+@-moz-document url-prefix() { 
+.class-name{
+  color: #ccc; /* Firefox */
+}
+}
+@media all and (min-width:0) { 
+.class-name{
+  color: #ccc; /* Opera */
+}
+} </span></code></pre>
+        
+        <h5>CSS hack - IE选择器前缀法</h5>
+        <p>如果碰到诸如IE8专属的hack等上面的方法都无法解决的时候，就可以用这个IE选择器前缀法了，前提是让IE6-IE8版本先支持媒体查询。</p>
+        <pre><code class="CSS"><span class="doctype">/* IE 6/7 */
+@media screen\9 {
+ .class-name{
+  color: #ccc;
+ }    
+}
+ 
+/* IE 6/7/8 */
+@media \0screen\,screen\9 {
+ .class-name{
+  color: #ccc;
+ }    
+}
+ 
+/* IE 8 */
+@media \0screen {
+ .class-name{
+  color: #ccc;
+ }  
+}
+ 
+/* IE 8/9/10 &amp; Opera */
+@media screen\0 {
+ .class-name{
+  color: #ccc;
+ }    
+}
+ 
+/* IE 9/10, Firefox 3.5+, Opera */
+@media screen and (min-resolution: +72dpi) {
+ .class-name{
+  color: #ccc;
+ }    
+}
+ 
+/* IE 9/10 */
+@media screen and (min-width:0\0) {
+ .class-name{
+  color: #ccc;
+ }    
+}
+ 
+/* IE 10+ */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+ .class-name{
+  color: #ccc;
+ }    
+}
+/* IE 11 */ 
+@media all and (-ms-high-contrast:none) { 
+  *::-ms-backdrop, .class-name { 
+    color: #ccc;
+  } 
+} 
+ 
+/* Everything but IE 6/7/8 */
+@media screen and (min-width: 400px) {
+ .class-name{
+  color: #ccc;
+ }    
+}</span></code></pre>
+
+        <h4 id=7>IE的调试技巧</h4>
+        <p>1. IE6-10系列大部分的浮动 div 问题，可以通过设置层的 width height 还有背景色（调试用）解决。<br />
+        2. 容器内有浮动层元素的，容器末尾添加清除浮动属性。<br />
+        3. 使用IE-TEST和谷歌调试工具，IE-8及以下版本可以使用fire-bug的JS版本，IE8及以上版本内置的调试工具仅供参考（和实际显示效果不一致）。<br />
+        4. IE调试都在标准模式下进行，兼容性视图下都仅供参考，和实际版本显示有差距。<br />
+        5. 调试版本从高到低依次兼容，防止属性版本污染。<br />
+        6. 调试过程，依次从HTML最外层开始删除无关的HTML结构和加载的CSS样式和JS，直到你出现问题的地方。<br />
+7. 如果项目时间紧，可以只在首页上做全部兼容，其他的页面兼容只做布局方面，忽略掉细节（有些细节一般不是一两天时间能解决的）。 <br />
+8. 能用其他方法避免的话，尽量少写hack。 <br />
+9. 细心，耐心，有目的性的反复调试，调试过程经常备份调试结果。<br />
+
+        </p>
+       
+        <h4 id=8>IE其他</h4>
+        <p>若有疑问，先减少百分比。<br />有时候某些错误会使50%+50%成为100.1%，使网页出现问题。这时请尝试将这些值改为49%，甚至49.9%。
+        </p>
+        <p>是否重设了默认的样式<br />某些属性如margin、padding等，不同浏览器会有不同的解释。因此最好在开发前首先将全体的margin、padding设置为0、列表样式设置为none等。</p>
+        <p>同时使用两个类­<br />一般只能给一个元素设定一个类（Class），但这并不意味着不能用两个。<br />对于一个ID，不能这样写。</p>
+
+      </div>
+    </div>
+  </section>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+
+</body>
+</html>
